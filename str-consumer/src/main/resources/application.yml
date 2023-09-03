@@ -1,0 +1,10 @@
+server:
+  port: 8100
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      retries: 3
+      retry-backoff-ms: 1000
+topico: "str-topic"
+
