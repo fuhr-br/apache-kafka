@@ -1,29 +1,29 @@
 package com.fuhr.strconsumer.listeners;
 
+import com.fuhr.strconsumer.custom.ConsumerCustomListener;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Log4j2
 @Component
 public class StrConsumerListener {
 
-  @KafkaListener(groupId = "group-1", topics = "str-topic", containerFactory = "getConcurrentKafkaListenerContainerFactory")
-  public void ouvirPrimeiraParticao(String mensagem) {
+  @ConsumerCustomListener
+  public void ouvirParticaoZero(String mensagem) {
 
-    log.info("METODO UM POCESSOU MENSAGEM DO GRUPO 1: {}", mensagem);
+    log.info("LEITOR PARTICAO ZERO POCESSOU MENSAGEM DO GRUPO 1: {}", mensagem);
   }
 
-  @KafkaListener(groupId = "group-1", topics = "str-topic", containerFactory = "getConcurrentKafkaListenerContainerFactory")
-  public void ouvirSegundaParticao(String mensagem) {
+  @ConsumerCustomListener
+  public void ouvirParticaoUm(String mensagem) {
 
-    log.info("METODO DOIS POCESSOU MENSAGEM DO GRUPO 1: {}", mensagem);
+    log.info("LEITOR PARTICAO UM POCESSOU MENSAGEM DO GRUPO 1: {}", mensagem);
   }
 
-  @KafkaListener(groupId = "group-2", topics = "str-topic", containerFactory = "getConcurrentKafkaListenerContainerFactory")
+  @ConsumerCustomListener(groupId = "grupo-2")
   public void ouvirDuasParticoesComOutroGrupo(String mensagem) {
 
-    log.info("METODO TRES POCESSOU MENSAGEM DO GRUPO 2: {}", mensagem);
+    log.info("LEITOR GRUPO 2 PROCESSOU MENSAGEM: {}", mensagem);
   }
 
 }
