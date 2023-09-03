@@ -2,6 +2,7 @@ package com.fuhr.strproducer.config;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,13 @@ public class KafkaAdminConfig {
    * Propriedades de configuração do Kafka.
    */
   private final KafkaProperties kafkaProperties;
+
+  /**
+   * Propriedades que define o nome do topico a ser criado
+   */
+  @Value("${topico}")
+  String topico;
+
 
   /**
    * Configura e cria um bean KafkaAdmin para gerenciar a administração do Kafka.
@@ -44,7 +52,7 @@ public class KafkaAdminConfig {
   public KafkaAdmin.NewTopics topics() {
 
     return new KafkaAdmin.NewTopics(
-        TopicBuilder.name("str-topic").partitions(2).replicas(1).build()
+        TopicBuilder.name(topico).partitions(2).replicas(1).build()
     );
   }
 }

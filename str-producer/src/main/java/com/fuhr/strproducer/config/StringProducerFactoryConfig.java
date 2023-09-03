@@ -41,7 +41,8 @@ public class StringProducerFactoryConfig {
   /**
    * Cria e configura um KafkaTemplate personalizado para produzir mensagens String.
    *
-   * @param producerFactory Uma fábrica de produtores Kafka configurada.
+   * @param producerFactory Uma fábrica de produtores Kafka configurada que foi criada
+   *                        pelo metodo producerFactory desta classe.
    * @return Uma instância de KafkaTemplate configurada para produzir mensagens String.
    */
   @Bean

@@ -4,3 +4,6 @@ spring:
   kafka:
     producer:
       bootstrap-servers: localhost:29092
+      retries: 3
+      retry-backoff-ms: 1000
+topico: "str-topic"

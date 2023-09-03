@@ -16,11 +16,14 @@
 - [Tecnologias](#tecnologias)
 - [Pré-Requisitos](#pré-requisitos)
 - [Como Rodar](#como-rodar)
+- [Rodando as APIs](#rodando-as-apis)
 
 
 ## Sobre o Projeto
 
 Esse projeto tem como objetivo implementar um exemplo de um serviço de mensageria utilizando Kafka.
+Primeiro você irá precisar instalar o docker no seu computador para rodar um container com os serviços do kafka.
+este projeto tem 2 APIs de exemplo com documentação, uma que é uma produtora e uma consumidora. Siga os passos abaixo para rodar o projeto.
 
 ## Funcionalidades
 
@@ -37,6 +40,7 @@ O sistema foi desenvolvido utilizando as seguintes tecnologias:
 | ------ | ------ |
 | Linguagem de programação | Java 17 |
 | Framework | SpringBoot  |
+| Documentação | Swagger  |
 | Interface para manipulação do kafka | Kafdrop  |
 | Gerenciador do cluster kafka | ZooKeeper  |
 | Gerenciador de dependências | Maven  |
@@ -55,9 +59,20 @@ docker-compose up -d
 `````
 Isso irá subir os serviços necessários para rodar o Kafka<br>
 
-Os serviços ficaram disponiveis em:
+O serviço do Kafdrop ficara disponivel em:
 
 # [Kafdrop](http://localhost:19000)
 `````
 http://localhost:19000
 `````
+
+## Rodando as APIs
+Primeiro vamos rodar a API responsável pelo serviço de produção das mensagens enviadas ao kafka.
+Ela esta na pasta `str-producer/` e ira rodar o serviço em:
+```
+http://localhost:8000
+```
+Neste endereço você pode acessar o swagger em:
+```
+http://localhost:8000/swagger-ui/index.html
+```
