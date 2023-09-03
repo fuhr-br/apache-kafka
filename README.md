@@ -76,3 +76,12 @@ Neste endereço você pode acessar o swagger em:
 ```
 http://localhost:8000/swagger-ui/index.html
 ```
+Agora vamos rodar a API responsável pelo serviço de consumo das mensagens enviadas ao kafka.
+
+Ela esta na pasta `str-consumer/` e ira rodar o serviço em:
+```
+http://localhost:8100
+```
+Agora basta subir as duas aplicações e você podera ver as mensagens de envio e recebimento nos LOGs das aplicações.
+
+
