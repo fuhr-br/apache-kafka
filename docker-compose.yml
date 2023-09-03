@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - broker-kafka
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    networks:
+      - broker-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      # Define o ID exclusivo do broker Kafka. Cada broker em um cluster Kafka deve ter um ID exclusivo.
+      KAFKA_BROKER_ID: 1
+      # Especifica a conexão com o serviço do ZooKeeper. O nome "zookeeper" é usado como hostname porque é o nome do serviço do ZooKeeper definido no mesmo arquivo Docker Compose.
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # Define os endereços aos quais os clientes Kafka podem se conectar. Aqui, estamos permitindo conexões em "kafka:29092" de outros contêineres e em "localhost:9092" do host local.
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      # Mapeia protocolos de segurança para os ouvintes especificados. Neste caso, estamos usando o protocolo "PLAINTEXT" para ambos os ouvintes.
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      # Especifica o nome do ouvinte interno usado para comunicação entre brokers.
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      # Define o fator de replicação para o tópico de offsets do Kafka. No caso de um único broker, um fator de replicação de 1 é adequado.
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    networks:
+      - broker-kafka
+    depends_on:
+      - kafka
+    ports:
+      - "19000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
+networks:
+  broker-kafka:
+    driver: bridge
