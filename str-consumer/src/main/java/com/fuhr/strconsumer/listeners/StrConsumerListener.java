@@ -20,7 +20,7 @@ public class StrConsumerListener {
     log.info("LEITOR PARTICAO UM POCESSOU MENSAGEM DO GRUPO 1: {}", mensagem);
   }
 
-  @ConsumerCustomListener(groupId = "grupo-2")
+  @ConsumerCustomListener(grupoId = "grupo-2")
   public void ouvirDuasParticoesComOutroGrupo(String mensagem) {
 
     log.info("LEITOR GRUPO 2 PROCESSOU MENSAGEM: {}", mensagem);

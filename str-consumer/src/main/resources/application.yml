@@ -6,6 +6,6 @@ spring:
       bootstrap-servers: localhost:29092
       retries: 3
       retry-backoff-ms: 1000
-#Kafka
-topico: str-topic
-grupoDefault: grupo-1
+kafka:
+  groupId: grupo-1
+  topic: topico-1

@@ -48,12 +48,13 @@ O sistema foi desenvolvido utilizando as seguintes tecnologias:
 
 
 ## Pré-Requisitos
-
-Antes de começar, você precisará ter o Docker instalado em sua máquina.<br>
+Você pode instalar as dependências do kafka manualmente, mas aconselho a ter o Docker instalado em sua máquina.<br>
 
 ## Como Rodar
 
-É necessário que você execute o seguinte comando dentro da pasta "APIs" onde se encontra o arquivo docker-compose.yml com as configurações do servidor kafka
+### Se for subir o serviço do kafka com docker:
+
+É necessário que você execute o seguinte comando na raiz do projeto onde se encontra o arquivo docker-compose.yml com as configurações do servidor kafka
 `````
 docker-compose up -d
 `````
@@ -65,6 +66,90 @@ O serviço do Kafdrop ficara disponivel em:
 `````
 http://localhost:19000
 `````
+
+### Se for subir o serviço do kafka sem o uso do docker:
+
+Primeiro será necessário baixar o kafka manualmente no site oficial do Apache kafka em: 
+
+[KAFKA 2.13-3.5.1](https://downloads.apache.org/kafka/3.5.1/kafka_2.13-3.5.1.tgz)
+```
+https://downloads.apache.org/kafka/3.5.1/kafka_2.13-3.5.1.tgz
+```
+
+Você pode verificar se existe uma versão mais atual indo diretamente na página de dowload:
+
+[APACHE KAFKA DOWLOAD](https://kafka.apache.org/downloads)
+```
+https://kafka.apache.org/downloads
+```
+
+
+#### Após será necessário descompactar o arquivo baixado, e dentro da pasta descompactada abra um prompt da sua preferência e siga os passos seguintes.
+OBS: Para subir os serviços, o endereço da pasta onde você descompactar os arquivos não pode ter espaços vazios como por exemplo: 
+
+```
+C:\Users\anderson.souza\Documents\Apache Kafka\Kafka
+```
+
+Troque por exemplo para:
+
+```
+C:\Users\anderson.souza\Documents\Apache-Kafka\Kafka
+```
+
+OBS: No windows pode ocorrer do endereço do path ser muito longo, se houver erro ao executar, tente descompactar diretamente no path:  `C:\`
+
+#### Agora primeiro será necessário subir a instância do zoolkeeper
+
+#### Iniciar o serviço do zoolkeeper
+#### No Windows
+```
+bin/windows/zookeeper-server-start.bat config/zookeeper.properties
+```
+#### Iniciar o serviço do zoolkeeper 
+#### No Linux
+```
+bin/zookeeper-server-start.sh config/zookeeper.properties
+```
+
+#### Se tudo deu certo, vamos subir o serviço do kafka:
+
+#### No Windows
+```
+bin/windows/kafka-server-start.bat config/server.properties
+```
+#### No Linux
+```
+bin/kafka-server-start.sh config/server.properties
+```
+
+Pronto você já tem um servidor kafka habilitado e pronto para uso!
+
+### Criar e manipular o kafka via prompt
+OBS: Repare que a diferença para rodar no windows ou Linux está no endereço e na extensão do arquivo que será executado, então se for usuário linux basta trocar a extensão `.bat` para `.sh` e o path `bin/windows/` para `bin/`
+#### Criar um tópico
+```
+bin/windows/kafka-topics.bat --create --topic NOME_TOPICO --bootstrap-server localhost:9092
+```
+
+#### Descrever um tópico
+```
+bin/windows/kafka-topics.bat --describe --topic NOME_TOPICO --bootstrap-server localhost:9092
+```
+
+#### Criar um produtor para um tópico
+Execute o comando abaixo para criar um serviço que irá enviar mensagens a um tópico, escreva a mensagem e  precione ENTER para enviar. Para encerrar o serviviço basta precionar `CTRL+C`
+```
+bin/windows/kafka-console-producer.bat --topic NOME_TOPICO --bootstrap-server localhost:9092
+```
+
+
+#### Criar um consumidor para um tópico
+Se quiser simular um serviço rapidamente que recebe uma mensagem enviada a um tópico basta rodar o comando abaixo. Para encerrar o serviviço basta precionar `CTRL+C`
+```
+bin/windows/kafka-console-consumer.bat --topic NOME_TOPICO --from-beginning --bootstrap-server localhost:9092
+```
+
 
 ## Rodando as APIs
 Primeiro vamos rodar a API responsável pelo serviço de produção das mensagens enviadas ao kafka.

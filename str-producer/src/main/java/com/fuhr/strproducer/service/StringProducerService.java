@@ -19,7 +19,8 @@ public class StringProducerService {
 
   public void enviarMensagem(String mensagem) {
 
-    kafkaTemplate.send(topico, mensagem).whenComplete((success, error) -> {
+    kafkaTemplate.send(topico, mensagem)
+        .whenComplete((success, error) -> {
       if (error == null) {
         log.info("Mensagem enviada com sucesso: [{}]", mensagem);
         log.info("Partition: [{}], Offset: [{}]",
