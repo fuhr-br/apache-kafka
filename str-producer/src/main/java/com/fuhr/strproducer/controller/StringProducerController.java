@@ -13,12 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "String Producer Controller", description = "Envia mensagens ao kafka")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/mensagem")
+@RequestMapping(value = "/enviar")
 public class StringProducerController {
 
   private final StringProducerService producerService;
 
-  @PostMapping(value = "/enviar")
+  @PostMapping(value = "/spring")
+  public ResponseEntity<Void> enviarMensagemSpring(@RequestBody String mensagem) {
+
+    producerService.enviarMensagemSpring(mensagem);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @PostMapping(value = "/java")
   public ResponseEntity<Void> enviarMensagem(@RequestBody String mensagem) {
 
     producerService.enviarMensagem(mensagem);
