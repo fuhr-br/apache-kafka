@@ -1,5 +1,6 @@
 package com.fuhr.strproducer.controller;
 
+import com.fuhr.strproducer.service.CustomProducerService;
 import com.fuhr.strproducer.service.StringProducerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,20 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/enviar")
 public class StringProducerController {
 
-  private final StringProducerService producerService;
+  private final StringProducerService stringProducerService;
+
+  private final CustomProducerService customProducerService;
 
   @PostMapping(value = "/spring")
   public ResponseEntity<Void> enviarMensagemSpring(@RequestBody String mensagem) {
 
-    producerService.enviarMensagemSpring(mensagem);
+    stringProducerService.enviarMensagemSpring(mensagem);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   @PostMapping(value = "/java")
   public ResponseEntity<Void> enviarMensagem(@RequestBody String mensagem) {
 
-    producerService.enviarMensagem(mensagem);
+    customProducerService.enviarMensagem(mensagem);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
-
 }

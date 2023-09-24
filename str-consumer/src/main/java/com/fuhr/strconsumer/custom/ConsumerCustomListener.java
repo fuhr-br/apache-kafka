@@ -47,4 +47,7 @@ public @interface ConsumerCustomListener {
   @Value("${kafka.groupId}")
   String grupoId() default "${kafka.groupId}";
 
+  @AliasFor(annotation = KafkaListener.class, attribute = "errorHandler")
+  String tratarExceptionComAClasse() default "errorCustomHandler";
+
 }

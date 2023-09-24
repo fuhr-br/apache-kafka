@@ -1,6 +1,7 @@
 package com.fuhr.strconsumer.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -9,15 +10,26 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.RecordInterceptor;
 
 import java.util.HashMap;
 
+/**
+ * Classe de configuração responsável por definir a configuração do consumidor Kafka para processar mensagens de um tópico Kafka.
+ * Utiliza as configurações definidas em propriedades e define um interceptor de registro personalizado.
+ */
+@Log4j2
 @Configuration
 @RequiredArgsConstructor
 public class StringConsumerFactoryConfig {
 
   private final KafkaProperties kafkaProperties;
 
+  /**
+   * Cria e configura uma fábrica de consumidores Kafka com base nas propriedades definidas.
+   *
+   * @return Uma instância de ConsumerFactory para consumir mensagens Kafka.
+   */
   @Bean
   public ConsumerFactory<String, String> consumerFactory() {
 
@@ -51,7 +63,9 @@ public class StringConsumerFactoryConfig {
     // Intervalo de tempo em que o consumidor irá enviar os offsets confirmados de volta ao Kafka (em milissegundos)
     configs.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
 
-    // Configuração para controlar o tempo limite de conexão do consumidor com o grupo
+    // Configuração que avisa o servidor Kafka de que o consumidor está ativo e em operação. Se o servidor Kafka não
+    // receber "heartbeats" (sinais de vida) do consumidor dentro do período especificado por SESSION_TIMEOUT_MS_CONFIG,
+    // ele considera o consumidor como inativo ou potencialmente falho.
     configs.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
 
     // Configuração para controlar o tempo limite máximo de processamento de uma única chamada ao poll
@@ -73,12 +87,37 @@ public class StringConsumerFactoryConfig {
     return new DefaultKafkaConsumerFactory<>(configs);
   }
 
+
+  /**
+   * Cria e configura uma instância de ConcurrentKafkaListenerContainerFactory para consumir mensagens de um tópico Kafka
+   * com um interceptor de registro personalizado.
+   *
+   * @param consumerFactory A fábrica de consumidores que fornece as configurações do consumidor Kafka.
+   * @return Uma instância de ConcurrentKafkaListenerContainerFactory configurada com um interceptor de registro personalizado.
+   */
   @Bean
   public ConcurrentKafkaListenerContainerFactory<String, String> getConcurrentKafkaListenerContainerFactory(ConsumerFactory<String, String> consumerFactory) {
 
     var factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
     factory.setConsumerFactory(consumerFactory);
-
+    factory.setRecordInterceptor(validMessage());
     return factory;
+  }
+
+  /**
+   * Cria um interceptor de registro personalizado para verificar e processar registros Kafka.
+   *
+   * @return Um interceptor de registro que verifica se o valor do registro contém "Alguma palavra".
+   */
+  private RecordInterceptor<String, String> validMessage() {
+
+    return (stringRecord, stringConsumer) -> {
+      if (stringRecord.value().contains("Alguma palavra")) {
+        log.info("Validar/Processar Objeto");
+        return stringRecord;
+      }
+      return stringRecord;
+
+    };
   }
 }
