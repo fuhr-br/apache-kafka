@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class StringProducerService {
 
   private final KafkaTemplate<String, String> kafkaTemplate;
-
+  private static final String CHAVE_MENSAGEM = "viaSpring";
   @Value("${topico}")
   private String topico;
 
@@ -28,9 +28,7 @@ public class StringProducerService {
    */
   public void enviarMensagemSpring(String mensagem) {
 
-    var chaveMensagem = "viaSpring";
-
-    kafkaTemplate.send(topico, chaveMensagem, mensagem)
+    kafkaTemplate.send(topico, CHAVE_MENSAGEM, mensagem)
         .whenComplete((success, error) -> {
           if (error == null) {
             log.info("Mensagem enviada com sucesso para o tópico: [" + topico + "] mensagem [{}]", mensagem);

@@ -18,6 +18,7 @@ import java.util.Properties;
 @Service
 public class CustomProducerService {
 
+  private static final String CHAVE_MENSAGEM = "viaJava";
   @Value("${topico}")
   private String topico;
 
@@ -30,10 +31,9 @@ public class CustomProducerService {
   public void enviarMensagem(String mensagem) {
 
     var produtor = new KafkaProducer<String, String>(propertiesKafkaConfig());
-    var chaveMensagem = "viaJava";
 
     //Aqui poderia enviar headers e outras coisas além da mensagem
-    var record = new ProducerRecord<>(topico, chaveMensagem, mensagem);
+    var record = new ProducerRecord<>(topico, CHAVE_MENSAGEM, mensagem);
 
     produtor.send(record, (success, error) -> {
       if (error == null) {
